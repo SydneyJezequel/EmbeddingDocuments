@@ -1,0 +1,14 @@
+langchain==0.1.10
+aiohttp
+dataclasses-json
+jsonpatch
+langchain-community
+langchain-core
+langchain-text-splitters
+langsmith
+numpy
+pydantic
+PyYAML
+requests
+SQLAlchemy
+tenacity
