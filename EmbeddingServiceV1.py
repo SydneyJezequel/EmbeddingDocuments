@@ -1,49 +1,7 @@
 from BO.VectorStore import VectorStore
 from BO.DataSet import DataSet
-from BO.Llama2Model import Llama2Model
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import os
+import replicate
 
 
 
@@ -103,57 +61,6 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-""" ****************************************************************************** """
-""" **************************** Exécution du Service **************************** """
-""" ****************************************************************************** """
-
-
-
-
-
-
 """ **************************** Initialisation du DataSet **************************** """
 
 
@@ -186,7 +93,7 @@ vector_store.populate_vectors(closed_qa_dataset)
 
 """  *******************  Configuration de l'API ******************* """
 
-"""
+
 # Méthode qui configure l'Api :
 def api_config(token):
     os.environ["REPLICATE_API_TOKEN"] = token
@@ -235,7 +142,6 @@ def get_enriched_answer(question, context, api):
     # Retour de la réponse :
     return result
 
-"""
 
 
 
@@ -244,7 +150,7 @@ def get_enriched_answer(question, context, api):
 """ ***************** Exécution du traitement ***************** """
 
 
-""" 
+
 # Token de l'Api :
 token = "r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG"
 
@@ -257,17 +163,13 @@ print("QUESTION : ", question)
 answer = get_answer(question, api)
 print('REPONSE : ', answer)
 
-"""
 
 
 
 
 
+""" ***************** Génération de Réponses intégrant le contexte ***************** """
 
-""" ***************** Génération de Réponses intégrant le contexte - Version 2 ***************** """
-
-
-"""
 
 # Cette étape a lieue après l'initialisation des vector_store et falcon_model.
 
@@ -284,107 +186,6 @@ context = "".join(context_response['context'][0])
 
 enriched_answer = get_enriched_answer(question, context, api)
 print(f"Result: {enriched_answer}")
-
-"""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-""" ****************************************************************************** """
-""" ************** Exécution du traitement avec l'objet Llama2Model ************** """
-""" ****************************************************************************** """
-
-
-# Question :
-question = "When was Tomoaki Komorida born?"
-# TEST :
-print(" question : ")
-print(question)
-
-
-# Récupération du context dans le VectorStore :
-context_response = vector_store.search_context(question)
-# TEST :
-print(" context_response : ")
-print(context_response)
-
-
-# Extraction du contexte de la réponse :
-# context = "".join(context_response['context'][0])
-context = "".join(context_response['documents'][0])
-# TEST :
-print(" context : ")
-print(context)
-
-
-# Token de l'Api :
-token = "r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG"
-question1 = "When was Tomoaki Komorida born?"
-
-
-# Instanciation du modèle Llama 2 :
-llama2Model = Llama2Model(token)
-# TEST :
-print("Llama2Model créé")
-
-
-# Génération d'une réponse :
-reponse1 = llama2Model.generate_answer(question1)
-# TEST :
-print("Llama2Model reponse1 : ")
-print(reponse1)
-
-
-# Génération d'une réponse avec son contexte :
-reponse2 = llama2Model.generate_enriched_answer(question1, context)
-# TEST :
-print("Llama2Model reponse2 : ")
-print(reponse2)
-
-
 
 
 
