@@ -1,7 +1,5 @@
-import transformers
-import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
 import replicate
+import os
 
 
 
@@ -15,8 +13,16 @@ class Llama2Model:
 
     """ Constructeur """
     def __init__(self, token):
-        self.api_token = token
-        self.api = replicate.Client(token=self.api_token)
+        self.api = self.api_config(token)
+
+
+
+    """ Méthode qui configure l'api du modèle Llama2 """
+    def api_config(self, token):
+        os.environ["REPLICATE_API_TOKEN"] = token
+        api = replicate.Client(api_token=os.environ["REPLICATE_API_TOKEN"])
+        return api
+
 
 
     """ Méthode qui interroge le modèle Llama2 """
@@ -31,7 +37,7 @@ class Llama2Model:
         )
         # Récupération de la réponse :
         for item in output:
-            result = item
+            result += item
         return result
 
 
@@ -42,8 +48,11 @@ class Llama2Model:
         # Préparation du prompt :
         prompt = question if context is None else f"{context}\n\n{question}"
 
+        print("TEST PROMPT : ", prompt)
+        print()
         # Génération des réponses avec le modèle Llama 2 via Replicate
         enriched_answer = self.generate_answer(prompt)
+        print("TEST enriched_answer : ", enriched_answer)
 
         """
         # Génération des réponses avec le modèle local

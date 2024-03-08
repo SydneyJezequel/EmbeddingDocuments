@@ -340,24 +340,16 @@ print(f"Result: {enriched_answer}")
 
 # Question :
 question = "When was Tomoaki Komorida born?"
-# TEST :
-print(" question : ")
-print(question)
 
 
 # Récupération du context dans le VectorStore :
 context_response = vector_store.search_context(question)
-# TEST :
-print(" context_response : ")
 print(context_response)
 
 
 # Extraction du contexte de la réponse :
 # context = "".join(context_response['context'][0])
 context = "".join(context_response['documents'][0])
-# TEST :
-print(" context : ")
-print(context)
 
 
 # Token de l'Api :
@@ -367,27 +359,19 @@ question1 = "When was Tomoaki Komorida born?"
 
 # Instanciation du modèle Llama 2 :
 llama2Model = Llama2Model(token)
-# TEST :
-print("Llama2Model créé")
 
 
 # Génération d'une réponse :
 reponse1 = llama2Model.generate_answer(question1)
-# TEST :
-print("Llama2Model reponse1 : ")
 print(reponse1)
 
 
 # Génération d'une réponse avec son contexte :
+print("QUESTION : ")
+print(question1)
+print("CONTEXTE : ")
+print(context)
 reponse2 = llama2Model.generate_enriched_answer(question1, context)
-# TEST :
 print("Llama2Model reponse2 : ")
 print(reponse2)
-
-
-
-
-
-
-
 
