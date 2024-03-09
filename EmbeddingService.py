@@ -156,7 +156,6 @@ if __name__ == "__main__":
 
 """ **************************** Initialisation du DataSet **************************** """
 
-
 # Initialisation du DataSet :
 dataset = DataSet()
 
@@ -363,15 +362,14 @@ llama2Model = Llama2Model(token)
 
 # Génération d'une réponse :
 reponse1 = llama2Model.generate_answer(question1)
+print("answer : ")
 print(reponse1)
 
 
 # Génération d'une réponse avec son contexte :
-print("QUESTION : ")
-print(question1)
-print("CONTEXTE : ")
-print(context)
-reponse2 = llama2Model.generate_enriched_answer(question1, context)
-print("Llama2Model reponse2 : ")
+reponse2 = llama2Model.generate_enriched_answer(question1, context=context)
+print("enriched_answer : ")
 print(reponse2)
+
+
 
