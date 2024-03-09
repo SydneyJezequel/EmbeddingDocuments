@@ -29,12 +29,12 @@ class DataSet:
 
 
     """ Méthode pour charger les données depuis un fichier """
-    def dataset_loader_from_file(self, file_path):
+    def dataset_loader_from_file(self, file_path, category='closed_qa'):
         # Vérifie l'extension du fichier pour déterminer le type :
         file_extension = file_path.split('.')[-1].lower()
         # Chargement du dataset en fonction du type de fichier :
         if file_extension == 'csv':
-            # Charger le fichier CSV avec pandas :
+            # Charger le fichier Csv avec pandas :
             dataset = pd.read_csv(file_path)
         elif file_extension == 'xlsx':
             # Charger le fichier Excel avec pandas :
@@ -44,6 +44,7 @@ class DataSet:
             with open(file_path, 'r') as file:
                 lines = file.readlines()
             dataset = [json.loads(line.strip()) for line in lines]
+            dataset = list(filter(lambda example: example.get('category') == category, dataset))
         else:
             raise ValueError("Extension de fichier non prise en charge. Utiliser un fichier CSV, Excel (xlsx) ou JSONL.")
         return dataset

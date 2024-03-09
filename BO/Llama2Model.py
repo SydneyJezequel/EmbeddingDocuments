@@ -48,11 +48,8 @@ class Llama2Model:
         # Préparation du prompt :
         prompt = question if context is None else f"{context}\n\n{question}"
 
-        print("TEST PROMPT : ", prompt)
-        print()
         # Génération des réponses avec le modèle Llama 2 via Replicate
         enriched_answer = self.generate_answer(prompt)
-        print("TEST enriched_answer : ", enriched_answer)
 
         """
         # Génération des réponses avec le modèle local
