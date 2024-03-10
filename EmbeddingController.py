@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from EmbeddingServiceVFINAL import EmbeddingService
 
 
 
@@ -36,6 +37,37 @@ async def pong():
 
 
 """ **************************************** Exécution du modèle GAN **************************************** """
+
+@app.get("/ping")
+async def load_dataset():
+    file_path = ""
+    category =""
+    embedding_service = EmbeddingService()
+    vector_store = embedding_service.vector_store_init()
+    embedding_service.dataset_init(file_path, category)
+    embedding_service.load_dataset_into_vector_store(vector_store, file_path, category)
+    return {"ping": "pong!"}
+
+
+
+@app.get("/ping")
+async def select_llm():
+    token = ""
+    llm_selected = ""
+    embedding_service = EmbeddingService()
+    llm_model = embedding_service.llm_model_init(token)
+    return {"ping": "pong!"}
+
+
+
+@app.get("/ping")
+async def get_answer():
+    question = ""
+    llModel = ""
+    vector_store = ""
+    embedding_service = EmbeddingService()
+    embedding_service.get_answer(question, llmModel, vector_store)
+    return {"ping": "pong!"}
 
 
 
