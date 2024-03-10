@@ -16,9 +16,28 @@ from EmbeddingServiceVFINAL import EmbeddingService
 
 
 
+""" **************************************** Commande pour installer les dépendances **************************************** """
+
+"""
+pip install -qU \
+    transformers==4.30.2 \
+    torch \
+    einops==0.6.1 \
+    accelerate==0.20.3 \
+    datasets==2.14.5 \
+    chromadb \
+    sentence-transformers==2.2.2
+"""
+
+
+
+
+
+
 """ **************************************** Chargement de l'Api **************************************** """
 
 app = FastAPI()
+embedding_service = EmbeddingService()
 
 
 
@@ -38,52 +57,24 @@ async def pong():
 
 """ **************************************** Exécution du modèle GAN **************************************** """
 
-@app.get("/ping")
-async def load_dataset():
-    file_path = ""
-    category =""
-    embedding_service = EmbeddingService()
-    vector_store = embedding_service.vector_store_init()
-    embedding_service.dataset_init(file_path, category)
-    embedding_service.load_dataset_into_vector_store(vector_store, file_path, category)
-    return {"ping": "pong!"}
+
+
+@app.post("/load_dataset", response_model=bool, status_code=200)
+async def load_dataset(file_path: str = "./embedded_file/camelia_yvon_jezequel_dataset.jsonl", category: str = "closed_qa"):
+    embedded_dataset = embedding_service.load_dataset_into_vector_store(file_path, category)
+    return embedded_dataset
 
 
 
-@app.get("/ping")
-async def select_llm():
-    token = ""
-    llm_selected = ""
-    embedding_service = EmbeddingService()
+@app.get("/select_llm", response_model=bool, status_code=200)
+async def select_llm(token: str = "r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG"):
     llm_model = embedding_service.llm_model_init(token)
-    return {"ping": "pong!"}
+    return llm_model
 
 
 
-@app.get("/ping")
-async def get_answer():
-    question = ""
-    llModel = ""
-    vector_store = ""
-    embedding_service = EmbeddingService()
-    embedding_service.get_answer(question, llmModel, vector_store)
-    return {"ping": "pong!"}
-
-
-
-
-
-
-""" **************************************** Commande pour installer les dépendances **************************************** """
-
-"""
-pip install -qU \
-    transformers==4.30.2 \
-    torch \
-    einops==0.6.1 \
-    accelerate==0.20.3 \
-    datasets==2.14.5 \
-    chromadb \
-    sentence-transformers==2.2.2
-"""
+@app.get("/get_llm_embedding_answer", response_model=str, status_code=200)
+async def get_answer(question=str):
+    answer = embedding_service.get_answer(question)
+    return answer
 
