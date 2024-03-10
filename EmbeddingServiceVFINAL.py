@@ -62,7 +62,7 @@ class EmbeddingService:
 
 
     """ Méthode qui répond aux questions """
-    def get_answer(self, question):
+    def get_llm_embedding_answer(self, question):
         # Récupération du context dans le VectorStore :
         context_response = self.vector_store.search_context(question)
         print("1")

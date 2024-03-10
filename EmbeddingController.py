@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+
+from BO.QuestionInput import QuestionInput
 from EmbeddingServiceVFINAL import EmbeddingService
 
 
@@ -74,7 +76,7 @@ async def select_llm(token: str = "r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG"):
 
 
 @app.get("/get_llm_embedding_answer", response_model=str, status_code=200)
-async def get_answer(question=str):
-    answer = embedding_service.get_answer(question)
+async def get_llm_embedding_answer(input_question: QuestionInput):
+    answer = embedding_service.get_llm_embedding_answer(input_question.question)
     return answer
 
