@@ -1,45 +1,45 @@
-from BO.VectorStore import VectorStore
-from BO.DataSet import DataSet
+from BO.DataSetVFinal2 import DataSetFinal2
 from BO.Llama2Model import Llama2Model
+from BO.VectorStore import VectorStore
 
 
 
 
 
 
-""" Classe qui représente la Base de données """
-class EmbeddingService:
+""" Classe EmbeddingService avec la possibilité de """
+class EmbeddingServiceVFINAL2:
 
 
 
     """ Constructeur """
     def __init__(self):
-        self.embedded_dataset = DataSet()
+        self.dataset = []
+        self.embedded_dataset = DataSetFinal2()
         self.vector_store = VectorStore("knowledge-base")
         self.llm_model = Llama2Model("r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG")
 
 
 
     """ Méthode qui initialise le dataSet """
-    def dataset_init(self, file_path, category):
-        dataset = DataSet()
-        self.embedded_dataset = dataset.dataset_loader_from_file(file_path=file_path, category=category)
-        print("EMBEDDED_DATASET : ")
-        print(self.embedded_dataset)
-        return self.embedded_dataset
+    def dataset_init(self, file_path):
+        dataset = DataSetFinal2()
+        self.dataset = dataset.dataset_loader_from_file(file_path=file_path)
+        print("dataset_init - embedded dataset : ")
+        print(self.dataset)
+        return self.dataset
 
 
 
-    """ Méthode qui initialise le Modèle LLM """
-    def llm_model_init(self, token):
-        """
-        METHODE A IMPLEMENTER AVEC LE TOKEN & L'URL POUR PERMETTRE A L'UTILISATEUR
-        DE CHOISIR LE LLM UTILISE.
-        """
+    """ Méthode charge un dataset contenant une catégorie de données """
+    def select_data_category_from_dataset(self, category):
         try:
-            token = "r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG"
-            llmModel = Llama2Model(token)
-            return True
+            filtered_examples = []
+            for example in self.dataset:
+                if example.get('category') == category and example.get('category') is not None:
+                    filtered_examples.append(example)
+            self.embedded_dataset = filtered_examples
+            self.load_dataset_into_vector_store()
         except Exception as e:
             print(f"Une erreur s'est produite : {e}")
             return False
@@ -47,9 +47,8 @@ class EmbeddingService:
 
 
     """ Chargement du dataset dans le VectorStore Chroma DB """
-    def load_dataset_into_vector_store(self, file_path, category):
+    def load_dataset_into_vector_store(self):
         try:
-            self.embedded_dataset = self.dataset_init(file_path, category)
             print("EMBEDDED_DATASET - VECTOR STORE : ")
             print(self.embedded_dataset)
             self.vector_store.populate_vectors(self.embedded_dataset)

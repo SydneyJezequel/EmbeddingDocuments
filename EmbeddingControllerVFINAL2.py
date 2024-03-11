@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from BO.QuestionInput import QuestionInput
-from BO.SelectDataSet import SelectDataSet
-from EmbeddingServiceVFINAL import EmbeddingService
+from BO.SelectCategoryDataSetVFinal2 import SelectCategoryDataSetVFinal2
+from BO.SelectDataSetVFinal2 import SelectDataSetVFinal2
+from EmbeddingServiceVFINAL2 import EmbeddingServiceVFINAL2
 
 
 
@@ -11,7 +12,7 @@ from EmbeddingServiceVFINAL import EmbeddingService
 """ **************************************** Commande pour démarrer l'application **************************************** """
 
 # uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8008
-# uvicorn EmbeddingController:app --reload --workers 1 --host 0.0.0.0 --port 8011
+# uvicorn EmbeddingControllerFINAL2:app --reload --workers 1 --host 0.0.0.0 --port 8011
 
 
 
@@ -39,7 +40,7 @@ pip install -qU \
 """ **************************************** Chargement de l'Api **************************************** """
 
 app = FastAPI()
-embedding_service = EmbeddingService()
+embedding_service = EmbeddingServiceVFINAL2()
 
 
 
@@ -63,21 +64,21 @@ async def pong():
 
 """ Méthode qui initialise un dataset """
 @app.post("/load_dataset", response_model=bool, status_code=200)
-async def load_dataset(data: SelectDataSet):
+async def load_dataset(data: SelectDataSetVFinal2):
     if data.file_path is None:
         data.file_path = "./embedded_file/camelia_yvon_jezequel_dataset.jsonl"
-    if data.category is None:
-        data.category = "closed_qa"
-    embedded_dataset = embedding_service.load_dataset_into_vector_store(data.file_path, data.category)
+    embedded_dataset = embedding_service.dataset_init(data.file_path)
     return embedded_dataset
 
 
 
-""" Méthode qui sélectionne un modèle """
-@app.get("/select_llm", response_model=bool, status_code=200)
-async def select_llm(token: str = "r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG"):
-    llm_model = embedding_service.llm_model_init(token)
-    return llm_model
+""" Méthode qui sélectionne une catégorie de données du dataset """
+@app.get("/select_categoryt", response_model=bool, status_code=200)
+async def select_category(category: SelectCategoryDataSetVFinal2):
+    if category.category is None:
+        category.category = "closed_qa"
+    embedded_dataset = embedding_service.select_data_category_from_dataset(category.category)
+    return embedded_dataset
 
 
 
