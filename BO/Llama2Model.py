@@ -44,10 +44,8 @@ class Llama2Model:
 
     """ Méthode qui interroge le modèle Llama2 en y ajoutant un contexte """
     def generate_enriched_answer(self, question, context=None):
-
         # Préparation du prompt :
         prompt = question if context is None else f"{context}\n\n{question}"
-
         # Génération des réponses avec le modèle Llama 2 via Replicate
         enriched_answer = self.generate_answer(prompt)
 

@@ -1,12 +1,14 @@
 import transformers
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
+from monsterapi import client
 
 
 
 
 
 
+# URL : https://monsterapi.ai/user/playground?model=falcon-7b-instruct
 """ Modèle Falcon7B """
 class Falcon7BModel:
 
@@ -15,43 +17,50 @@ class Falcon7BModel:
     """ Constructeur """
     def __init__(self):
         # Définition du modèle :
-        model_name = "tiiuae/falcon-7b-instruct"
+        self.model_name = 'falcon-7b-instruct'
         # Initialisation des pipeline, tokenizer et modèle :
-        self.pipeline, self.tokenizer = self.initialize_model(model_name)
+        self.monster_client = self.initialize_model()
 
 
 
     """ Méthode qui initialise le modèle """
-    def initialize_model(self, model_name):
-        # Initialisation du Tokenizer :
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-        # Configuration du pipeline pour de la génération de texte :
-        pipeline = transformers.pipeline(
-            "text-generation",
-            model=model_name,
-            tokenizer=tokenizer,
-            torch_dtype=torch.bfloat16,
-            trust_remote_code=True,
-            device_map="auto",
-        )
-        # Renvoi du pipeline et du tokenizer :
-        return pipeline, tokenizer
+    def initialize_model(self):
+        # Initialisation du client MonsterAPI avec la clé API :
+        monster_api_key = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImM2OWRiZjIyNjMyYzE0ZjA2YThiNjEwZmQ2OGRiYzIzIiwiY3JlYXRlZF9hdCI6IjIwMjQtMDMtMTFUMjE6Mzc6MjguNTMzNTg5In0.kTwV0eh4EZs-ajLuUSPy1fTiSckXVn62xkmyZiw2H1Y'
+        monster_client = client(monster_api_key)
+        # Renvoi du pipeline, du tokenizer et du client MonsterAPI :
+        return monster_client
 
 
 
-    """ Méthode qui génère une réponse """
-    def generate_answer(self, question, context=None):
+    """ Méthode qui interroge le modèle Falcon7B """
+    def generate_answer(self, question):
+        # Attributs :
+        result = ""
+        # Traitement :
+        # Interrogation du modèle :
+        input_data = {
+            'prompt': question
+        }
+        output = self.monster_client.generate(self.model_name, input_data)
+        print("TEST INPUT_DATA : ", input_data)
+        print("TEST OUTPUT : ", output)
+        response_text = output['text']
+        print("TEST OUTPUT 2 : ", response_text)
+        # Récupération de la réponse :
+        for item in output:
+            result += item
+        return response_text
+
+
+
+    """ Méthode qui interroge le modèle Falcon7B en y ajoutant un contexte """
+    def generate_enriched_answer(self, question, context=None):
         # Préparation du prompt :
         prompt = question if context is None else f"{context}\n\n{question}"
-        # Génération des réponses :
-        sequences = self.pipeline(
-            prompt,
-            max_length=500,
-            do_sample=True,
-            top_k=10,
-            num_return_sequences=1,
-            eos_token_id=self.tokenizer.eos_token_id,
-        )
-        # Extraction et renvoi du texte généré :
-        return sequences['generated_text']
+        print("TEST PROMPT : ", prompt)
+        # Génération des réponses avec le modèle Llama 2 via Replicate
+        enriched_answer = self.generate_answer(prompt)
+        # Retour de la réponse :
+        return enriched_answer
 

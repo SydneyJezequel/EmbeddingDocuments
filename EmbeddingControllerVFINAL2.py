@@ -12,7 +12,7 @@ from EmbeddingServiceVFINAL2 import EmbeddingServiceVFINAL2
 """ **************************************** Commande pour démarrer l'application **************************************** """
 
 # uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8008
-# uvicorn EmbeddingControllerFINAL2:app --reload --workers 1 --host 0.0.0.0 --port 8011
+# uvicorn EmbeddingControllerVFINAL2:app --reload --workers 1 --host 0.0.0.0 --port 8011
 
 
 
@@ -62,7 +62,7 @@ async def pong():
 
 
 
-""" Méthode qui initialise un dataset """
+""" Méthode qui initialise le dataset """
 @app.post("/load_dataset", response_model=bool, status_code=200)
 async def load_dataset(data: SelectDataSetVFinal2):
     if data.file_path is None:
@@ -72,12 +72,12 @@ async def load_dataset(data: SelectDataSetVFinal2):
 
 
 
-""" Méthode qui sélectionne une catégorie de données du dataset """
-@app.get("/select_categoryt", response_model=bool, status_code=200)
-async def select_category(category: SelectCategoryDataSetVFinal2):
-    if category.category is None:
-        category.category = "closed_qa"
-    embedded_dataset = embedding_service.select_data_category_from_dataset(category.category)
+""" Méthode qui charge une catégorie de données du dataset """
+@app.get("/select_category", response_model=bool, status_code=200)
+async def select_category(category_from_dataset: SelectCategoryDataSetVFinal2):
+    if category_from_dataset.category is None:
+        category_from_dataset.category = "closed_qa"
+    embedded_dataset = embedding_service.select_data_category_from_dataset(category_from_dataset.category)
     return embedded_dataset
 
 

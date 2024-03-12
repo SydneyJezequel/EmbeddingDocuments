@@ -1,5 +1,6 @@
 from BO.DataSetVFinal2 import DataSetFinal2
 from BO.Llama2Model import Llama2Model
+from BO.Falcon7BModel import Falcon7BModel
 from BO.VectorStore import VectorStore
 
 
@@ -7,31 +8,42 @@ from BO.VectorStore import VectorStore
 
 
 
-""" Classe EmbeddingService avec la possibilité de """
+""" Classe EmbeddingService - VERSION FINALE """
 class EmbeddingServiceVFINAL2:
 
 
 
     """ Constructeur """
     def __init__(self):
+        # Initialisation du DataSet brut :
         self.dataset = []
+        # Initialisation du DataSet filtré :
         self.embedded_dataset = DataSetFinal2()
+        # Initialisation du modèle d'Embedding :
         self.vector_store = VectorStore("knowledge-base")
-        self.llm_model = Llama2Model("r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG")
+        # Initialisation du modèle LLM :
+        # self.llm_model = Llama2Model("r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG")
+        self.llm_model = Falcon7BModel()
 
 
 
-    """ Méthode qui initialise le dataSet """
+    """ Méthode qui initialise le dataset """
     def dataset_init(self, file_path):
-        dataset = DataSetFinal2()
-        self.dataset = dataset.dataset_loader_from_file(file_path=file_path)
-        print("dataset_init - embedded dataset : ")
-        print(self.dataset)
-        return self.dataset
+        try:
+            dataset = DataSetFinal2()
+            self.dataset = dataset.dataset_loader_from_file(file_path=file_path)
+            # ***************** TEST ***************** #
+            print("dataset_init - embedded dataset : ")
+            print(self.dataset)
+            # ***************** TEST ***************** #
+            return True
+        except Exception as e:
+            print(f"Une erreur s'est produite : {e}")
+            return False
 
 
 
-    """ Méthode charge un dataset contenant une catégorie de données """
+    """ Méthode qui charge une catégorie de données du dataset """
     def select_data_category_from_dataset(self, category):
         try:
             filtered_examples = []
@@ -39,18 +51,25 @@ class EmbeddingServiceVFINAL2:
                 if example.get('category') == category and example.get('category') is not None:
                     filtered_examples.append(example)
             self.embedded_dataset = filtered_examples
+            # ***************** TEST ***************** #
+            print("select_data_category_from_dataset: ")
+            print(self.embedded_dataset)
+            # ***************** TEST ***************** #
             self.load_dataset_into_vector_store()
+            return True
         except Exception as e:
             print(f"Une erreur s'est produite : {e}")
             return False
 
 
 
-    """ Chargement du dataset dans le VectorStore Chroma DB """
+    """ Chargement du dataset dans Chroma DB """
     def load_dataset_into_vector_store(self):
         try:
-            print("EMBEDDED_DATASET - VECTOR STORE : ")
+            # ***************** TEST ***************** #
+            print("load_dataset_into_vector_store : ")
             print(self.embedded_dataset)
+            # ***************** TEST ***************** #
             self.vector_store.populate_vectors(self.embedded_dataset)
             print("dataset chargé dans le vector store. ")
             return True
