@@ -1,6 +1,6 @@
 from BO.DataSetVFinal2 import DataSetFinal2
 from BO.Llama2Model import Llama2Model
-from BO.Falcon7BModel import Falcon7BModel
+from BO.LlmModel import LlmModel
 from BO.VectorStore import VectorStore
 
 
@@ -23,7 +23,7 @@ class EmbeddingServiceVFINAL2:
         self.vector_store = VectorStore("knowledge-base")
         # Initialisation du modèle LLM :
         # self.llm_model = Llama2Model("r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG")
-        self.llm_model = Falcon7BModel()
+        self.llm_model = LlmModel()
 
 
 
@@ -33,8 +33,7 @@ class EmbeddingServiceVFINAL2:
             dataset = DataSetFinal2()
             self.dataset = dataset.dataset_loader_from_file(file_path=file_path)
             # ***************** TEST ***************** #
-            print("dataset_init - embedded dataset : ")
-            print(self.dataset)
+            print("dataset_init - embedded dataset : ", self.dataset)
             # ***************** TEST ***************** #
             return True
         except Exception as e:
@@ -52,8 +51,7 @@ class EmbeddingServiceVFINAL2:
                     filtered_examples.append(example)
             self.embedded_dataset = filtered_examples
             # ***************** TEST ***************** #
-            print("select_data_category_from_dataset: ")
-            print(self.embedded_dataset)
+            print("select_data_category_from_dataset: ", self.embedded_dataset)
             # ***************** TEST ***************** #
             self.load_dataset_into_vector_store()
             return True
@@ -67,8 +65,7 @@ class EmbeddingServiceVFINAL2:
     def load_dataset_into_vector_store(self):
         try:
             # ***************** TEST ***************** #
-            print("load_dataset_into_vector_store : ")
-            print(self.embedded_dataset)
+            print("load_dataset_into_vector_store : ", self.embedded_dataset)
             # ***************** TEST ***************** #
             self.vector_store.populate_vectors(self.embedded_dataset)
             print("dataset chargé dans le vector store. ")
@@ -83,14 +80,10 @@ class EmbeddingServiceVFINAL2:
     def get_llm_embedding_answer(self, question):
         # Récupération du context dans le VectorStore :
         context_response = self.vector_store.search_context(question)
-        print("1")
         # Extraction du contexte de la réponse :
         context = "".join(context_response['documents'][0])
-        print("2")
         # Génération de la réponse :
         response = self.llm_model.generate_enriched_answer(question, context=context)
-        print("3")
-        print("Réponse  : ")
-        print(response)
+        print("Réponse  : ", response)
         return response
 

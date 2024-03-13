@@ -13,9 +13,13 @@ requests
 SQLAlchemy
 tenacity
 
+fastapi~=0.110.0
 datasets~=2.14.5
 chromadb~=0.4.24
 transformers~=4.30.2
 torch~=2.1.2
 replicate~=0.24.0
-fastapi~=0.110.0
+httpx==0.21.0
+googletrans==2.4.0
+translate==3.6.1
+

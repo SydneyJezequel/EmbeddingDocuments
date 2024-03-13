@@ -1,16 +1,14 @@
-import transformers
-import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
 from monsterapi import client
+from translate import Translator
 
 
 
 
 
 
-# URL : https://monsterapi.ai/user/playground?model=falcon-7b-instruct
-""" Modèle Falcon7B """
-class Falcon7BModel:
+# URL de l'Api : https://monsterapi.ai/user/playground?model=falcon-7b-instruct
+""" Modèle LLM (Llama2-7B ou Falcon7B) """
+class LlmModel:
 
 
 
@@ -18,8 +16,12 @@ class Falcon7BModel:
     def __init__(self):
         # Définition du modèle :
         self.model_name = 'falcon-7b-instruct'
+        # self.model_name = 'llama2-7b-chat'
         # Initialisation des pipeline, tokenizer et modèle :
         self.monster_client = self.initialize_model()
+        # Sélection de la langue :
+        self.prompt_language = 'français'
+        self.translate_language = 'fr'
 
 
 
@@ -33,23 +35,26 @@ class Falcon7BModel:
 
 
 
+    # Sélection de la langue :
+    """ Méthode qui définit la langue des réponses renvoyées par le modèle """
+    def set_language(self, language):
+        self.prompt_language = language
+
+
+
     """ Méthode qui interroge le modèle Falcon7B """
     def generate_answer(self, question):
-        # Attributs :
-        result = ""
-        # Traitement :
         # Interrogation du modèle :
         input_data = {
-            'prompt': question
+            'prompt': question,
+            'language': self.prompt_language
         }
+        print("input data : ", input_data)
+        # Génération de la réponse :
         output = self.monster_client.generate(self.model_name, input_data)
-        print("TEST INPUT_DATA : ", input_data)
-        print("TEST OUTPUT : ", output)
-        response_text = output['text']
-        print("TEST OUTPUT 2 : ", response_text)
         # Récupération de la réponse :
-        for item in output:
-            result += item
+        response_text = output['text']
+        print("log de réponse : ", response_text)
         return response_text
 
 
@@ -61,6 +66,16 @@ class Falcon7BModel:
         print("TEST PROMPT : ", prompt)
         # Génération des réponses avec le modèle Llama 2 via Replicate
         enriched_answer = self.generate_answer(prompt)
+        answer_translated = self.translate_answer(enriched_answer)
+        print("answer_translated : ", answer_translated)
         # Retour de la réponse :
-        return enriched_answer
+        return answer_translated
 
+
+
+    """ Méthode qui traduit la réponse du modèle en français. 
+    Elle garantie que la réponse sera en langue française """
+    def translate_answer(self, text):
+        translator = Translator(to_lang=self.translate_language)
+        translation = translator.translate(text)
+        return translation
