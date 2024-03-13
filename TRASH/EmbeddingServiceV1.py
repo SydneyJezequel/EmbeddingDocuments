@@ -1,5 +1,5 @@
-from BO.VectorStore import VectorStore
-from BO.DataSet import DataSet
+from BO.VectorDataBase import VectorStore
+from TRASH.TRASH_SERVICE_CONTROLLER.DataSet import DataSet
 import os
 import replicate
 

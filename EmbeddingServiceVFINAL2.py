@@ -1,7 +1,6 @@
 from BO.DataSetVFinal2 import DataSetFinal2
-from BO.Llama2Model import Llama2Model
 from BO.LlmModel import LlmModel
-from BO.VectorStore import VectorStore
+from BO.VectorDataBase import VectorDataBase
 
 
 
@@ -20,7 +19,7 @@ class EmbeddingServiceVFINAL2:
         # Initialisation du DataSet filtré :
         self.embedded_dataset = DataSetFinal2()
         # Initialisation du modèle d'Embedding :
-        self.vector_store = VectorStore("knowledge-base")
+        self.vector_store = VectorDataBase("knowledge-base")
         # Initialisation du modèle LLM :
         # self.llm_model = Llama2Model("r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG")
         self.llm_model = LlmModel()
@@ -78,7 +77,7 @@ class EmbeddingServiceVFINAL2:
 
     """ Méthode qui répond aux questions """
     def get_llm_embedding_answer(self, question):
-        # Récupération du context dans le VectorStore :
+        # Récupération du context dans la BDD Vectorielle :
         context_response = self.vector_store.search_context(question)
         # Extraction du contexte de la réponse :
         context = "".join(context_response['documents'][0])

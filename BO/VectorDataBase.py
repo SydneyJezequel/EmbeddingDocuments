@@ -7,7 +7,7 @@ from sentence_transformers import SentenceTransformer
 
 
 """ Classe qui représente la Base de données """
-class VectorStore:
+class VectorDataBase:
 
 
 
