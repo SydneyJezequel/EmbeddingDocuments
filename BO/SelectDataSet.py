@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 
-""" Classe qui indique le chemin du dataset et le type de donées à récupérée dedans """
+""" Version final - Classe qui indique le chemin du dataset  """
 class SelectDataSet(BaseModel):
     file_path: str
-    category: str
+

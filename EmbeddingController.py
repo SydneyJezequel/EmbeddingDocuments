@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from BO.QuestionInput import QuestionInput
+from BO.SelectCategoryDataSet import SelectCategoryDataSet
 from BO.SelectDataSet import SelectDataSet
-from EmbeddingServiceVFINAL import EmbeddingService
+from EmbeddingService import EmbeddingService
 
 
 
@@ -61,23 +62,23 @@ async def pong():
 
 
 
-""" Méthode qui initialise un dataset """
+""" Méthode qui initialise le dataset """
 @app.post("/load_dataset", response_model=bool, status_code=200)
 async def load_dataset(data: SelectDataSet):
     if data.file_path is None:
-        data.file_path = "../../embedded_file/camelia_yvon_jezequel_dataset.jsonl"
-    if data.category is None:
-        data.category = "closed_qa"
-    embedded_dataset = embedding_service.load_dataset_into_vector_store(data.file_path, data.category)
+        data.file_path = "./embedded_file/camelia_yvon_jezequel_dataset.jsonl"
+    embedded_dataset = embedding_service.dataset_init(data.file_path)
     return embedded_dataset
 
 
 
-""" Méthode qui sélectionne un modèle """
-@app.get("/select_llm", response_model=bool, status_code=200)
-async def select_llm(token: str = "r8_JDzPiCeExTDt9TR6t5wkXoFoGLLerJ63V0bCG"):
-    llm_model = embedding_service.llm_model_init(token)
-    return llm_model
+""" Méthode qui charge une catégorie de données du dataset """
+@app.get("/select_category", response_model=bool, status_code=200)
+async def select_category(category_from_dataset: SelectCategoryDataSet):
+    if category_from_dataset.category is None:
+        category_from_dataset.category = "closed_qa"
+    embedded_dataset = embedding_service.select_data_category_from_dataset(category_from_dataset.category)
+    return embedded_dataset
 
 
 

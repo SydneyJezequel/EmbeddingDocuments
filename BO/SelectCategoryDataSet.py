@@ -6,6 +6,6 @@ from pydantic import BaseModel
 
 
 """  Version final - Classe qui indique la 'Catégorie' de données à récupérer """
-class SelectCategoryDataSetVFinal2(BaseModel):
+class SelectCategoryDataSet(BaseModel):
     category: str
 

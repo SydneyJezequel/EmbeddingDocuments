@@ -12,7 +12,7 @@ Elle charge séparement :
 - Le DataSet.
 - Certains type de données pour contextualiser les réponses.
 """
-class DataSetFinal2:
+class DataSet:
 
 
 

@@ -1,4 +1,4 @@
-from BO.DataSetVFinal2 import DataSetFinal2
+from BO.DataSet import DataSet
 from BO.LlmModel import LlmModel
 from BO.VectorDataBase import VectorDataBase
 
@@ -8,7 +8,7 @@ from BO.VectorDataBase import VectorDataBase
 
 
 """ Classe EmbeddingService - VERSION FINALE """
-class EmbeddingServiceVFINAL2:
+class EmbeddingService:
 
 
 
@@ -17,7 +17,7 @@ class EmbeddingServiceVFINAL2:
         # Initialisation du DataSet brut :
         self.dataset = []
         # Initialisation du DataSet filtré :
-        self.embedded_dataset = DataSetFinal2()
+        self.embedded_dataset = DataSet()
         # Initialisation du modèle d'Embedding :
         self.vector_store = VectorDataBase("knowledge-base")
         # Initialisation du modèle LLM :
@@ -29,7 +29,7 @@ class EmbeddingServiceVFINAL2:
     """ Méthode qui initialise le dataset """
     def dataset_init(self, file_path):
         try:
-            dataset = DataSetFinal2()
+            dataset = DataSet()
             self.dataset = dataset.dataset_loader_from_file(file_path=file_path)
             # ***************** TEST ***************** #
             print("dataset_init - embedded dataset : ", self.dataset)
