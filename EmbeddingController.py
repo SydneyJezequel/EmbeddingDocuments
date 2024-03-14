@@ -63,28 +63,44 @@ async def pong():
 
 
 """ Méthode qui initialise le dataset """
-@app.post("/load_dataset", response_model=bool, status_code=200)
+@app.post("/load-dataset", response_model=bool, status_code=200)
 async def load_dataset(data: SelectDataSet):
+    # ************* TEST ************* #
+    print("load_dataset : ", data.file_path)
+    return True
+    # ************* TEST ************* #
+    """
     if data.file_path is None:
         data.file_path = "./embedded_file/camelia_yvon_jezequel_dataset.jsonl"
     embedded_dataset = embedding_service.dataset_init(data.file_path)
     return embedded_dataset
+    """
 
 
 
-""" Méthode qui charge une catégorie de données du dataset """
-@app.get("/select_category", response_model=bool, status_code=200)
+""" Méthode qui sélectionne des données du dataset en fonction de leur catégorie """
+@app.post("/select-category", response_model=bool, status_code=200)
 async def select_category(category_from_dataset: SelectCategoryDataSet):
+    # ************* TEST ************* #
+    print("TEST select_category : ", category_from_dataset.category)
+    return True
+    # ************* TEST ************* #
+    """
     if category_from_dataset.category is None:
         category_from_dataset.category = "closed_qa"
     embedded_dataset = embedding_service.select_data_category_from_dataset(category_from_dataset.category)
     return embedded_dataset
+    """
 
 
 
-""" Méthode qui récupère une réponse """
-@app.get("/get_llm_embedding_answer", response_model=str, status_code=200)
+""" Méthode qui récupère une réponse à partir de la question posée """
+@app.post("/get-llm-embedding-answer", response_model=str, status_code=200)
 async def get_llm_embedding_answer(input_question: QuestionInput):
+    print("TEST get_llm_embedding_answer : ", input_question.question)
+    return "coucou GET LLM"
+    """
     answer = embedding_service.get_llm_embedding_answer(input_question.question)
     return answer
+    """
 
