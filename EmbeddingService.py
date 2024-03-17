@@ -49,9 +49,7 @@ class EmbeddingService:
                 if example.get('category') == category and example.get('category') is not None:
                     filtered_examples.append(example)
             self.embedded_dataset = filtered_examples
-            # ***************** TEST ***************** #
-            print("select_data_category_from_dataset: ", self.embedded_dataset)
-            # ***************** TEST ***************** #
+            print("EMBEDDED_DATASET : ", self.embedded_dataset)
             self.load_dataset_into_vector_store()
             return True
         except Exception as e:
@@ -63,9 +61,6 @@ class EmbeddingService:
     """ Chargement du dataset dans Chroma DB """
     def load_dataset_into_vector_store(self):
         try:
-            # ***************** TEST ***************** #
-            print("load_dataset_into_vector_store : ", self.embedded_dataset)
-            # ***************** TEST ***************** #
             self.vector_store.populate_vectors(self.embedded_dataset)
             print("dataset chargé dans le vector store. ")
             return True
@@ -76,13 +71,16 @@ class EmbeddingService:
 
 
     """ Méthode qui répond aux questions """
-    def get_llm_embedding_answer(self, question):
+    def get_llm_embedding_answer(self, input_question):
+        # Préparation des paramètres de la question :
+        question = input_question.question
+        category = input_question.category
         # Récupération du context dans la BDD Vectorielle :
         context_response = self.vector_store.search_context(question)
         # Extraction du contexte de la réponse :
         context = "".join(context_response['documents'][0])
+        print("CONTEXT : ", context)
         # Génération de la réponse :
-        response = self.llm_model.generate_enriched_answer(question, context=context)
-        print("Réponse  : ", response)
+        response = self.llm_model.generate_enriched_answer(question, category, context=context)
         return response
 

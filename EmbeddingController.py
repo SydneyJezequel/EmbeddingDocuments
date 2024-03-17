@@ -85,7 +85,6 @@ async def select_category(category_from_dataset: SelectCategoryDataSet):
 """ Méthode qui récupère une réponse à partir de la question posée """
 @app.post("/get-llm-embedding-answer", response_model=str, status_code=200)
 async def get_llm_embedding_answer(input_question: QuestionInput):
-    print("TEST get_llm_embedding_answer : ", input_question.question)
-    answer = embedding_service.get_llm_embedding_answer(input_question.question)
+    answer = embedding_service.get_llm_embedding_answer(input_question)
     return answer
 

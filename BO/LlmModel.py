@@ -47,29 +47,85 @@ class LlmModel:
         # Interrogation du modèle :
         input_data = {
             'prompt': question,
-            'language': self.prompt_language
         }
         print("input data : ", input_data)
         # Génération de la réponse :
         output = self.monster_client.generate(self.model_name, input_data)
         # Récupération de la réponse :
         response_text = output['text']
-        print("log de réponse : ", response_text)
         return response_text
 
 
 
     """ Méthode qui interroge le modèle Falcon7B en y ajoutant un contexte """
-    def generate_enriched_answer(self, question, context=None):
+    def generate_enriched_answer(self, question, category, context=None):
         # Préparation du prompt :
-        prompt = question if context is None else f"{context}\n\n{question}"
-        print("TEST PROMPT : ", prompt)
-        # Génération des réponses avec le modèle Llama 2 via Replicate
-        enriched_answer = self.generate_answer(prompt)
-        answer_translated = self.translate_answer(enriched_answer)
-        print("answer_translated : ", answer_translated)
-        # Retour de la réponse :
-        return answer_translated
+        prompt = f'"question": "{question}", "context": "{context}", "language": "français"' if context is not None else f'"question": "{question}", "context": "", "language": "français"'
+        # Initialisation des valeurs (category 'closed_qa' par défaut) :
+        top_k = 15
+        top_p = 0.1
+        temp = 0.1
+        max_length = 256
+        beam_size = 1
+        # Modification des paramètres passés à l'Api en fonction de la catégorie des données :
+        print("category : ", category)
+        if category == 'classification':
+            top_k = 15
+            top_p = 0.5
+            temp = 0.99
+            max_length = 256
+            beam_size = 1
+        if category == 'summarization':
+            top_k = 15
+            top_p = 0.5
+            temp = 0.99
+            max_length = 256
+            beam_size = 1
+        if category == 'brainstorming':
+            top_k = 15
+            top_p = 0.5
+            temp = 0.99
+            max_length = 256
+            beam_size = 1
+        # Préparation de l'objet envoyé à l'Api :
+        input_data = {
+            'prompt': prompt,
+            'top_k': top_k,
+            'top_p': top_p,
+            'temp': temp,
+            'max_length': max_length,
+            'beam_size': beam_size,
+        }
+        try:
+            # Génération des réponses avec le modèle Falcon-7B :
+            output = self.monster_client.generate(self.model_name, input_data)
+            print("OUTPUT : ", output)
+            print("TYPE OUTPUT : ", type(output))
+            text = ""
+            # Récupération du texte contenant la réponse :
+            if isinstance(output, dict):
+                text = output.get('text', '')
+                print("DICT : ", text)
+                print(type(text))
+            elif isinstance(output, str):
+                text = output
+                print("STR : ", output)
+                print(type(text))
+            # Analyse de la chaîne de caractères pour extraire la réponse :
+            if text:
+                answer_index = text.find('"answer": "')
+                if answer_index != -1:
+                    answer_start_index = answer_index + len('"answer": "')
+                    answer_end_index = text.find('"', answer_start_index)
+                    response = text[answer_start_index:answer_end_index]
+                else:
+                    response = text
+            else:
+                response = "Désolé. Je n'ai pas trouvé de réponse à votre question."
+            response_translated = self.translate_answer(response)
+            return response_translated
+        except Exception as e:
+            print(f"Une erreur s'est produite : {e}")
 
 
 
