@@ -58,17 +58,17 @@ class LlmModel:
 
 
     """ Méthode qui interroge le modèle Falcon7B en y ajoutant un contexte """
-    def generate_enriched_answer(self, question, category, context=None):
+    def generate_enriched_answer(self, question, context=None):
         # Préparation du prompt :
         prompt = f'"question": "{question}", "context": "{context}", "language": "français"' if context is not None else f'"question": "{question}", "context": "", "language": "français"'
-        # Initialisation des valeurs (category 'closed_qa' par défaut) :
+        # Initialisation des paramètre de l'input :
         top_k = 15
         top_p = 0.1
         temp = 0.1
         max_length = 256
         beam_size = 1
+        """
         # Modification des paramètres passés à l'Api en fonction de la catégorie des données :
-        print("category : ", category)
         if category == 'classification':
             top_k = 15
             top_p = 0.5
@@ -87,6 +87,7 @@ class LlmModel:
             temp = 0.99
             max_length = 256
             beam_size = 1
+        """
         # Préparation de l'objet envoyé à l'Api :
         input_data = {
             'prompt': prompt,

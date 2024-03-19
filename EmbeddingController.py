@@ -66,7 +66,7 @@ async def pong():
 @app.post("/load-dataset", response_model=bool, status_code=200)
 async def load_dataset(data: SelectDataSet):
     if data.path is None:
-        data.path = "./embedded_file/camelia_yvon_jezequel_dataset.jsonl"
+        data.path = "./embedded_file/embedded_file.jsonl"
     embedded_dataset = embedding_service.dataset_init(data.path)
     return embedded_dataset
 
@@ -85,6 +85,7 @@ async def select_category(category_from_dataset: SelectCategoryDataSet):
 """ Méthode qui récupère une réponse à partir de la question posée """
 @app.post("/get-llm-embedding-answer", response_model=str, status_code=200)
 async def get_llm_embedding_answer(input_question: QuestionInput):
+    print(input_question.question)
     answer = embedding_service.get_llm_embedding_answer(input_question)
     return answer
 

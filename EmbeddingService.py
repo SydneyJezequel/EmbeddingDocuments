@@ -74,13 +74,12 @@ class EmbeddingService:
     def get_llm_embedding_answer(self, input_question):
         # Préparation des paramètres de la question :
         question = input_question.question
-        category = input_question.category
         # Récupération du context dans la BDD Vectorielle :
         context_response = self.vector_store.search_context(question)
         # Extraction du contexte de la réponse :
         context = "".join(context_response['documents'][0])
         print("CONTEXT : ", context)
         # Génération de la réponse :
-        response = self.llm_model.generate_enriched_answer(question, category, context=context)
+        response = self.llm_model.generate_enriched_answer(question, context=context)
         return response
 
