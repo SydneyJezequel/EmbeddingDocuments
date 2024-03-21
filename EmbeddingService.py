@@ -7,13 +7,13 @@ from BO.VectorDataBase import VectorDataBase
 
 
 
-""" Classe EmbeddingService - VERSION FINALE """
 class EmbeddingService:
+    """ Classe EmbeddingService - VERSION FINALE """
 
 
 
-    """ Constructeur """
     def __init__(self):
+        """ Constructeur """
         # Initialisation du DataSet brut :
         self.dataset = []
         # Initialisation du DataSet filtré :
@@ -26,8 +26,8 @@ class EmbeddingService:
 
 
 
-    """ Méthode qui initialise le dataset """
     def dataset_init(self, file_path):
+        """ Méthode qui initialise le dataset """
         try:
             dataset = DataSet()
             self.dataset = dataset.dataset_loader_from_file(file_path=file_path)
@@ -41,8 +41,8 @@ class EmbeddingService:
 
 
 
-    """ Méthode qui charge une catégorie de données du dataset """
     def select_data_category_from_dataset(self, category):
+        """ Méthode qui charge une catégorie de données du dataset """
         try:
             filtered_examples = []
             for example in self.dataset:
@@ -58,8 +58,8 @@ class EmbeddingService:
 
 
 
-    """ Chargement du dataset dans Chroma DB """
     def load_dataset_into_vector_store(self):
+        """ Chargement du dataset dans Chroma DB """
         try:
             self.vector_store.populate_vectors(self.embedded_dataset)
             print("dataset chargé dans le vector store. ")
@@ -70,8 +70,8 @@ class EmbeddingService:
 
 
 
-    """ Méthode qui répond aux questions """
     def get_llm_embedding_answer(self, input_question):
+        """ Méthode qui répond aux questions """
         # Préparation des paramètres de la question :
         question = input_question.question
         # Récupération du context dans la BDD Vectorielle :

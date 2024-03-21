@@ -20,7 +20,7 @@ from TRASH.TRASH_SERVICE_CONTROLLER.Llama2Model import Llama2Model
 
 # 1- Création du dataset :
 dataset = DataSet()
-file_path = "../../embedded_file/camelia_yvon_jezequel_dataset.jsonl"
+file_path = "../../resources/default_dataset/camelia_yvon_jezequel_dataset.jsonl"
 category = 'closed_qa'
 camelia_yvon_jezequel_dataset = dataset.dataset_loader_from_file(file_path=file_path, category=category)
 
@@ -102,7 +102,7 @@ print(reponse_obtention)
 # QUESTION 3 :
 
 # Modification du Dataset :
-file_path = "../../embedded_file/camelia_yvon_jezequel_dataset.jsonl"
+file_path = "../../resources/default_dataset/camelia_yvon_jezequel_dataset.jsonl"
 category = 'brainstorming'
 camelia_yvon_jezequel_poem_dataset = dataset.dataset_loader_from_file(file_path=file_path, category=category)
 

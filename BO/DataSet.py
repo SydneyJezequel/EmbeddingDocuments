@@ -1,4 +1,3 @@
-from datasets import load_dataset
 import pandas as pd
 import json
 
@@ -7,32 +6,24 @@ import json
 
 
 
-""" Classe qui représente le DataSet - VERSION FINALE.
-Elle charge séparement :
-- Le DataSet.
-- Certains type de données pour contextualiser les réponses.
-"""
 class DataSet:
+    """ Classe qui représente le DataSet """
+    """
+        Elle charge séparement :
+        * Le Dataset.
+        * Certaines catégories de données pour contextualiser les réponses.
+    """
 
 
 
-    """ Constructeur """
     def __init__(self):
+        """ Constructeur """
         pass
 
 
 
-    """ Méthode pour charger les données """
-    """ ************* CETTE METHODE SERA SÛREMENT A SUPPRIMER ************* """
-    def dataset_loader(self):
-        # Chargement du dataset d'entrainement :
-        train_dataset = load_dataset("databricks/databricks-dolly-15k", split='train')
-        return train_dataset
-
-
-
-    """ Méthode pour charger les données depuis un fichier """
     def dataset_loader_from_file(self, file_path):
+        """ Méthode pour charger les données depuis un fichier """
         # Récupération de l'extension du fichier :
         file_extension = file_path.split('.')[-1].lower()
         # Chargement du dataset en fonction de l'extension :

@@ -65,7 +65,7 @@ async def pong():
 @app.post("/load_dataset", response_model=bool, status_code=200)
 async def load_dataset(data: SelectDataSet):
     if data.file_path is None:
-        data.file_path = "../../embedded_file/camelia_yvon_jezequel_dataset.jsonl"
+        data.file_path = "../../resources/default_dataset/camelia_yvon_jezequel_dataset.jsonl"
     if data.category is None:
         data.category = "closed_qa"
     embedded_dataset = embedding_service.load_dataset_into_vector_store(data.file_path, data.category)

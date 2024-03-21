@@ -7,13 +7,13 @@ from translate import Translator
 
 
 # URL de l'Api : https://monsterapi.ai/user/playground?model=falcon-7b-instruct
-""" Modèle LLM (Llama2-7B ou Falcon7B) """
 class LlmModel:
+    """ Modèle LLM (Llama2-7B ou Falcon7B) """
 
 
 
-    """ Constructeur """
     def __init__(self):
+        """ Constructeur """
         # Définition du modèle :
         self.model_name = 'falcon-7b-instruct'
         # self.model_name = 'llama2-7b-chat'
@@ -25,8 +25,8 @@ class LlmModel:
 
 
 
-    """ Méthode qui initialise le modèle """
     def initialize_model(self):
+        """ Méthode qui initialise le modèle """
         # Initialisation du client MonsterAPI avec la clé API :
         monster_api_key = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImM2OWRiZjIyNjMyYzE0ZjA2YThiNjEwZmQ2OGRiYzIzIiwiY3JlYXRlZF9hdCI6IjIwMjQtMDMtMTFUMjE6Mzc6MjguNTMzNTg5In0.kTwV0eh4EZs-ajLuUSPy1fTiSckXVn62xkmyZiw2H1Y'
         monster_client = client(monster_api_key)
@@ -35,15 +35,14 @@ class LlmModel:
 
 
 
-    # Sélection de la langue :
-    """ Méthode qui définit la langue des réponses renvoyées par le modèle """
     def set_language(self, language):
+        """ Méthode qui sélectionne la langue des réponses """
         self.prompt_language = language
 
 
 
-    """ Méthode qui interroge le modèle Falcon7B """
     def generate_answer(self, question):
+        """ Méthode qui interroge le modèle Falcon7B """
         # Interrogation du modèle :
         input_data = {
             'prompt': question,
@@ -57,8 +56,8 @@ class LlmModel:
 
 
 
-    """ Méthode qui interroge le modèle Falcon7B en y ajoutant un contexte """
     def generate_enriched_answer(self, question, context=None):
+        """ Méthode qui interroge le modèle Falcon7B en y ajoutant un contexte """
         # Préparation du prompt :
         prompt = f'"question": "{question}", "context": "{context}", "language": "français"' if context is not None else f'"question": "{question}", "context": "", "language": "français"'
         # Initialisation des paramètre de l'input :
@@ -67,27 +66,6 @@ class LlmModel:
         temp = 0.1
         max_length = 256
         beam_size = 1
-        """
-        # Modification des paramètres passés à l'Api en fonction de la catégorie des données :
-        if category == 'classification':
-            top_k = 15
-            top_p = 0.5
-            temp = 0.99
-            max_length = 256
-            beam_size = 1
-        if category == 'summarization':
-            top_k = 15
-            top_p = 0.5
-            temp = 0.99
-            max_length = 256
-            beam_size = 1
-        if category == 'brainstorming':
-            top_k = 15
-            top_p = 0.5
-            temp = 0.99
-            max_length = 256
-            beam_size = 1
-        """
         # Préparation de l'objet envoyé à l'Api :
         input_data = {
             'prompt': prompt,
@@ -130,9 +108,9 @@ class LlmModel:
 
 
 
-    """ Méthode qui traduit la réponse du modèle en français. 
-    Elle garantie que la réponse sera en langue française """
     def translate_answer(self, text):
+        """ Méthode qui traduit la réponse du modèle en français """
         translator = Translator(to_lang=self.translate_language)
         translation = translator.translate(text)
         return translation
+
