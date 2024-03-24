@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from BO.QuestionInput import QuestionInput
 from BO.SelectCategoryDataSet import SelectCategoryDataSet
 from BO.SelectDataSet import SelectDataSet
-from EmbeddingService import EmbeddingService
+from service.EmbeddingService import EmbeddingService
 
 
 
