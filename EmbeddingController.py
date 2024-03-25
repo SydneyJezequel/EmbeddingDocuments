@@ -11,26 +11,7 @@ from service.EmbeddingService import EmbeddingService
 
 """ **************************************** Commande pour démarrer l'application **************************************** """
 
-# uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8008
 # uvicorn EmbeddingController:app --reload --workers 1 --host 0.0.0.0 --port 8011
-
-
-
-
-
-
-""" **************************************** Commande pour installer les dépendances **************************************** """
-
-"""
-pip install -qU \
-    transformers==4.30.2 \
-    torch \
-    einops==0.6.1 \
-    accelerate==0.20.3 \
-    datasets==2.14.5 \
-    chromadb \
-    sentence-transformers==2.2.2
-"""
 
 
 
@@ -59,8 +40,6 @@ async def pong():
 
 
 """ **************************** Manipulation du modèle LLM **************************** """
-
-
 
 @app.post("/load-dataset", response_model=bool, status_code=200)
 async def load_dataset(data: SelectDataSet):

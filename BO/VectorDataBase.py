@@ -1,9 +1,7 @@
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-
-
-
+import config
 
 
 class VectorDataBase:
@@ -14,7 +12,7 @@ class VectorDataBase:
     def __init__(self, collection_name):
         """ Constructeur """
         # Initialisation du modèle d'Embedding :
-        self.embedding_model = SentenceTransformer('sentence-transformers/multi-qa-MiniLM-L6-cos-v1')
+        self.embedding_model = SentenceTransformer(config.TRANSFORMER)
         self.chroma_client = chromadb.Client()
         self.collection = self.chroma_client.create_collection(name=collection_name)
 

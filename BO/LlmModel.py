@@ -1,9 +1,7 @@
 from monsterapi import client
 from translate import Translator
 
-
-
-
+import config
 
 
 # URL de l'Api : https://monsterapi.ai/user/playground?model=falcon-7b-instruct
@@ -15,20 +13,19 @@ class LlmModel:
     def __init__(self):
         """ Constructeur """
         # Définition du modèle :
-        self.model_name = 'falcon-7b-instruct'
-        # self.model_name = 'llama2-7b-chat'
+        self.model_name = config.MODEL_NAME_FALCON7B
         # Initialisation des pipeline, tokenizer et modèle :
         self.monster_client = self.initialize_model()
         # Sélection de la langue :
-        self.prompt_language = 'français'
-        self.translate_language = 'fr'
+        self.prompt_language = config.PROMPT_LANGUAGE
+        self.translate_language = config.TRANSLATE_LANGUAGE
 
 
 
     def initialize_model(self):
         """ Méthode qui initialise le modèle """
         # Initialisation du client MonsterAPI avec la clé API :
-        monster_api_key = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImM2OWRiZjIyNjMyYzE0ZjA2YThiNjEwZmQ2OGRiYzIzIiwiY3JlYXRlZF9hdCI6IjIwMjQtMDMtMTFUMjE6Mzc6MjguNTMzNTg5In0.kTwV0eh4EZs-ajLuUSPy1fTiSckXVn62xkmyZiw2H1Y'
+        monster_api_key = config.MONSTER_API_KEY
         monster_client = client(monster_api_key)
         # Renvoi du pipeline, du tokenizer et du client MonsterAPI :
         return monster_client
