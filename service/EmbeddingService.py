@@ -31,9 +31,7 @@ class EmbeddingService:
         try:
             dataset = DataSet()
             self.dataset = dataset.dataset_loader_from_file(file_path=file_path)
-            # ***************** TEST ***************** #
             print("dataset_init - embedded dataset : ", self.dataset)
-            # ***************** TEST ***************** #
             return True
         except Exception as e:
             print(f"Une erreur s'est produite : {e}")
