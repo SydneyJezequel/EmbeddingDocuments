@@ -10,7 +10,6 @@ from service.EmbeddingService import EmbeddingService
 
 
 """ **************************************** Commande pour démarrer l'application **************************************** """
-
 # uvicorn EmbeddingController:app --reload --workers 1 --host 0.0.0.0 --port 8011
 
 
